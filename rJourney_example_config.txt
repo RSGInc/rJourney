@@ -3,7 +3,7 @@ RunInBatchMode                F
 MonthOfYear                   0
 EachDayOfTheMonth             F
 RandomSeed                    12345
-Sample1inX                    1000
+Sample1inX                    100
 SampleOffset                  0
 WriteHouseholdRecords         T
 WriteTourRecords              T
