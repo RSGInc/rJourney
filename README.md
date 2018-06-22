@@ -9,6 +9,10 @@ FHWA National long distance passenger model
   - Select Clone or Download and then Download Zip
   - Download the large inputs file using this link: https://github.com/RSGInc/rJourney_public/raw/master/inputs.7z
 
+## Run complete package
+  - Unzip the complete package zip file
+  - run rJourney.exe
+  
 ## Run command line version
   - Open command prompt in the project folder
   - Unzip the inputs using the free 7zip
