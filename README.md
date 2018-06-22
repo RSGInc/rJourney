@@ -1,10 +1,18 @@
 # rJourney
-National long distance passenger model created for FHWA
+FHWA National long distance passenger model
 
-To run, use command line...
-rJourney_1_3 config.txt
-where config.txt is the configuration file
+# Download complete package, including user interface and model
+  - http://rjourney.southcentralus.cloudapp.azure.com/
 
-A fairly complete version of the model documentation is included in the repository, with a full report available from the FHWA website.
+# Download just the command line model and inputs from GitHub
+  - Go to https://github.com/rsginc/rjourney_public
+  - Select Clone or Download and then Download Zip
+  - Download the large inputs file using this link: https://github.com/RSGInc/rJourney_public/raw/master/inputs.7z
 
-Use the 7z zip freeware to unzip the input directory data files
+# Run command line version
+  - Open command prompt in the project folder
+  - run rJourney_1_3.exe
+  - specifiy rJourney_example_config.txt
+
+# Documentation 
+  - User Guide_Long Distance National Multi-Modal Model Supplemental Work_FINAL.pdf
