@@ -11,8 +11,9 @@ FHWA National long distance passenger model
 
 ## Run command line version
   - Open command prompt in the project folder
+  - Unzip the inputs using the free 7zip
   - run rJourney_1_3.exe
-  - specifiy rJourney_example_config.txt
+  - specify rJourney_example_config.txt
 
 ## Documentation 
   - User Guide_Long Distance National Multi-Modal Model Supplemental Work_FINAL.pdf
