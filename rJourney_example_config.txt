@@ -31,6 +31,7 @@ BusPersonTripMatrixFileName   bus_ptrip_example_output.csv
 RailPersonTripMatrixFileName  rail_ptrip_example_output.csv
 AirPersonTripMatrixFileName   air_ptrip_example_output.csv
 InputDirectoryName            inputs
+RoadLOSFileName               zoneRoadLOS.dat
 RailLOSFileName               zoneRailLOS.dat
 AirLOSFileName                zoneAirLOS.dat
 ZoneLandUseFileName           numa_2010_landuse.dat
