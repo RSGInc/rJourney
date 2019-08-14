@@ -5,6 +5,8 @@ program rJourney_1_3;
 uses
   SysUtils;
 
+type integer = longint;
+
 function max(a,b:single):single;
 begin
   if a>b then max:=a else max:=b;
@@ -37,12 +39,12 @@ begin
 end;
 function setFileName(dirname,filename:string):string;
 begin
-  if filename[2]=':'
+  if (filename[2]=':') or (filename='/')
      then setFileName:=filename
   else if (dirname[length(dirname)]='\') or (filename[1]='\')
        or (dirname[length(dirname)]='/') or (filename[1]='/')
      then setFileName:=dirname+filename
-  else setFileName:=dirname+'\'+filename;
+  else setFileName:=SetDirSeparators(dirname+'\'+filename);
 end;
 
 {Constants}
@@ -55,6 +57,7 @@ const
  AirLOSFileName:string='zoneAirLOS.dat';
  ZoneLandUseFileName:string='numa_2010_landuse.dat';
  HouseholdFileName:string='us_synpop_hh2_sorted.dat';
+ numberOfHouseholds:integer = 114736858;
  OutputDirectoryName:string='outputs';
  HouseholdDayFileName:string='household_out_1.csv';
  TourFileName:string='tour_out_1.csv';
@@ -257,6 +260,7 @@ begin
         if key='randomseed' then    RandomSeed :=checkint(arg,1,99999) else
         if key='sample1inx' then    Sample1inX :=checkint(arg,1,1000000) else
         if key='sampleoffset' then  SampleOffset :=checkint(arg,0,99999) else
+        if key='numberofhouseholds' then  numberOfHouseholds :=checkint(arg,0,200000000) else
         if key='writehouseholdrecords' then  WriteHouseholds  :=checkbool(arg) else
         if key='writetourrecords' then  WriteTours  :=checkbool(arg) else
         if key='writeautovehicletripmatrix' then  WriteTripMatrix[0] :=checkbool(arg) else
@@ -579,6 +583,7 @@ var hhId, hhZone, hhSize, hhWorkers, hhNonWkrs, hhHasKids, hhHeadAge, hhIncome: 
 procedure openHouseholdInputFile(filename:string);
 begin
   filename:=setFileName(InputDirectoryName,filename);
+  writeln('Reading Households from ', filename, ' ....');
   resetTextFile(hhInFile,filename);
   readln(hhInFile); {header}
 end;
@@ -1762,7 +1767,7 @@ begin
 end;
 
 
-var lastHH:boolean; nHHRecs, lastHHZoneIndex, purpose,hhseg,dband,mode:integer; lsfile:text;
+var lastHH:boolean; nHHRecs, lastHHZoneIndex, purpose,hhseg,dband,mode,percent:integer; lsfile:text;
 
 {Main program}
 
@@ -1790,12 +1795,14 @@ begin
   if writeMDLogsums then begin
     assign(lsfile,'mdlogsums3.dat'); rewrite(lsfile);
   end;
-  writeln('Millions of households read ....');
   nHHRecs:=0;
   lasthhZoneIndex:=0;
   repeat
     nHHRecs:=nHHRecs+1;
-    if nHHrecs mod 1000000=0 then write(nHHRecs div 1000000:8);
+    if nHHRecs mod (numberOfHouseholds div 20) = 0 then begin
+      percent:=round(nHHRecs/numberOfHouseholds * 100);
+      writeln('Households read: ', nHHRecs:8, '/', numberOfHouseholds, percent:4, '%');
+    end;
     loadNextHouseholdRecord(lastHH);
     if hhZoneIndex>lasthhZoneIndex then begin
       calculateModeDestinationProbabilities(hhZoneIndex);
@@ -1832,5 +1839,3 @@ begin
     write('Press Enter to exit'); readln;
   end;
 end.
-
-

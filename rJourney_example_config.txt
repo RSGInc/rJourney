@@ -36,6 +36,7 @@ RailLOSFileName               zoneRailLOS.dat
 AirLOSFileName                zoneAirLOS.dat
 ZoneLandUseFileName           numa_2010_landuse.dat
 HouseholdFileName             us_synpop_hh3_sorted.dat
+numberOfHouseholds            114736858
 CoefficientDirectoryName      coefficients
 DestChoiceCoefficientFile_1   pbusdest6_bxc.F12
 DestChoiceCoefficientFile_2   vfardest6_bxc.F12
