@@ -1,0 +1,70 @@
+# azure-pipelines.yml
+# Configuration file for building, running, and testing the RSGInc/rJourney model on RSG's
+# local test server, operated by Azure Pipelines. DaySim is a Free Pascal application that can
+# be compiled and run on 64bit Windows, Linux, or Mac architecture.
+#
+# Code for rJourney is hosted at https://github.com/RSGInc/rJourney_public
+
+# Azure will build/run tests if on develop branch, or if branch includes 'azure' keyword
+trigger:
+  branches:
+    include:
+    - develop
+    - '*azure*'
+
+# win64
+pool: RSGLocal-Builds
+
+variables:
+  resourcesDir: $(Agent.HomeDirectory)\rJourney_resources
+  resourcesRepo: RSGInc/rJourney_resources.git
+  config: rJourney_azure_config.txt
+
+  # https://sourceforge.net/projects/freepascal/
+  fpc: C:\ProgramData\Lazarus\fpc\3.0.4\bin\x86_64-win64\fpc.exe
+
+steps:
+- script: $(fpc) -h
+  displayName: Check FPC
+
+# Use git lfs to pull entire data files, not just pointers
+- task: PowerShell@2
+  displayName: Get latest test data
+  inputs:
+    targetType: inline
+    script: |
+      if ( !(Test-Path "$(resourcesDir)") ) {
+        git clone https://$(GH_TOKEN)@github.com/$(resourcesRepo) $(resourcesDir)
+      }
+      cd $(resourcesDir)
+      git checkout .
+      git clean -fd
+      git lfs pull
+
+- script: |
+    cd $(System.DefaultWorkingDirectory)
+    git clean -fd
+    mkdir outputs
+  displayName: Create output folder
+
+# Flags:
+#   -Co fails build if integer overflow is detected
+#   -Mdelphi required for Delphi 7 compatibility
+- script: $(fpc) -Co -Mdelphi .\rJourney_1_3.pas
+  displayName: Compile rJourney
+
+- task: PowerShell@2
+  displayName: Add inputs path to config file
+  inputs:
+    targetType: inline
+    script: echo "InputDirectoryName  $(resourcesDir)\azure_inputs" | ac -path .\$(config)
+
+- script: .\rJourney_1_3.exe .\$(config)
+  displayName: Run rJourney
+
+- script: type *.log
+  displayName: Show logfile
+
+# Expect exact output
+- script: git diff --no-index --compact-summary --exit-code $(resourcesDir)\azure_target_outputs outputs
+  displayName: Compare outputs
