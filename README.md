@@ -1,23 +1,24 @@
 # rJourney
 FHWA National long distance passenger model
 
-## Download complete package, including user interface and model
-  - http://rjourney.southcentralus.cloudapp.azure.com/
-
-## Download just the command line model and inputs from GitHub
-  - Go to https://github.com/rsginc/rjourney_public
+### Download the command line model and inputs from GitHub
+  - Go to https://github.com/rsginc/rjourney
   - Select Clone or Download and then Download Zip
-  - Download the large inputs file using this link: https://github.com/RSGInc/rJourney_public/raw/master/inputs.7z
+  - Download the [large inputs file](https://github.com/RSGInc/rJourney_resources/raw/master/inputs.7z)
+  - Optional: Download the [500-zone sample household file](https://github.com/RSGInc/rJourney_resources/blob/master/azure_inputs/us_synpop_hh3_500_zone_sample.dat) for faster runtime
 
-## Run complete package
-  - Unzip the complete package zip file
-  - run rJourney.exe
-  
-## Run command line version
-  - Open command prompt in the project folder
+### Optional: Build rJourney from source
+  - Required for Mac or Linux
+  - Install the [Free Pascal Compiler](https://sourceforge.net/projects/freepascal/)
+  - Compile rJourney:
+    - Open Terminal in the project folder
+    - run `fpc -Mdelphi rJourney_1_3.pas`
+
+## Run rJourney
+  - Open command prompt, PowerShell, or Terminal in the project folder
   - Unzip the inputs using the free 7zip
-  - run rJourney_1_3.exe
-  - specify rJourney_example_config.txt
+  - run `rJourney_1_3.exe .\rJourney_example_config.txt`
+  - (Mac/Linux: `./rJourney_1_3 ./rJourney_example_config.txt`)
 
-## Documentation 
-  - User Guide_Long Distance National Multi-Modal Model Supplemental Work_FINAL.pdf
+## Documentation
+  - Additional resources, example configs, and documentation can be found at [rJourney_resources](https://github.com/rsginc/rjourney_resources)
