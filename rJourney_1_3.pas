@@ -43,7 +43,7 @@ begin
      then setFileName:=filename
   else if (dirname[length(dirname)]='\') or (filename[1]='\')
        or (dirname[length(dirname)]='/') or (filename[1]='/')
-     then setFileName:=dirname+filename
+     then setFileName:=SetDirSeparators(dirname+filename)
   else setFileName:=SetDirSeparators(dirname+'\'+filename);
 end;
 

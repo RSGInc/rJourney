@@ -22,7 +22,8 @@ ScenarioPercentAutoTimeChange 0
 ScenarioPercentAirFareChange  0
 ScenarioPercentRailTimeChange 0
 OutputFileDelimeter           44
-OutputDirectoryName           outputs
+OutputDirectoryName           azure_outputs
+InputDirectoryName            rJourney_resources\azure_inputs
 HouseholdOutputFileName       household_azure_output.csv
 TourOutputFileName            tour_azure_output.csv
 AutoVehicleTripMatrixFileName auto_vtrip_azure_output.csv
@@ -36,7 +37,7 @@ AirLOSFileName                zoneAirLOS.dat
 ZoneLandUseFileName           numa_2010_landuse.dat
 HouseholdFileName             us_synpop_hh3_500_zone_sample.dat
 numberOfHouseholds            20867354
-CoefficientDirectoryName      coefficients
+CoefficientDirectoryName      rJourney_resources\azure_inputs\coefficients
 DestChoiceCoefficientFile_1   pbusdest6_bxc.F12
 DestChoiceCoefficientFile_2   vfardest6_bxc.F12
 DestChoiceCoefficientFile_3   leisdest6_bxc.F12
