@@ -22,3 +22,9 @@ FHWA National long distance passenger model
 
 ### Documentation
   - Additional resources, example configs, and documentation can be found at [rJourney_resources](https://github.com/rsginc/rjourney_resources)
+
+## Beijing
+
+The BTI long distance passenger model can be run similarly to the FHWA model.
+
+[Inputs](https://github.com/RSGInc/rJourney_resources/blob/beijing/bti_inputs.zip) and [Documentation](https://github.com/RSGInc/rJourney_resources/blob/beijing/BTI%20Long-Distance%20Model%20Implementation%20Report%20FINAL.pdf) can both be found on [rJourney_resources](https://github.com/RSGInc/rJourney_resources).

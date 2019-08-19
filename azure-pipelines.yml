@@ -1,16 +1,15 @@
 # azure-pipelines.yml
-# Configuration file for building, running, and testing the rJourney model on RSG's
+# Configuration file for building, running, and testing the BTI rJourney model on RSG's
 # local test server, operated by Azure Pipelines. rJourney is a Free Pascal application that can
 # be compiled and run on 64bit Windows, Linux, or Mac architecture.
 #
-# Code for rJourney is hosted at https://github.com/RSGInc/rJourney_public
+# Code for rJourney is hosted at https://github.com/RSGInc/rJourney
 
-# Azure will build/run tests if on master branch, or if branch includes 'azure' keyword
+# Azure will build/run tests if on beijing branch
 trigger:
   branches:
     include:
-    - master
-    - '*azure*'
+    - beijing
 
 # win64
 pool: RSGLocal-Builds
@@ -18,8 +17,8 @@ pool: RSGLocal-Builds
 variables:
   resourcesDir: $(Agent.HomeDirectory)\rJourney_resources
   resourcesRepo: RSGInc/rJourney_resources.git
-  config: rJourney_azure_config.txt
-  program: rJourney_1_3
+  config: bti_azure_config.txt
+  program: BTI_LongDistance_1_1
 
   # https://sourceforge.net/projects/freepascal/
   fpc: C:\ProgramData\Lazarus\fpc\3.0.4\bin\x86_64-win64\fpc.exe
@@ -28,7 +27,7 @@ steps:
 - script: $(fpc) -h
   displayName: Check FPC
 
-# Use git lfs to pull entire data files, not just pointers
+# Checkout the beijing branch
 - task: PowerShell@2
   displayName: Get latest test data
   inputs:
@@ -38,8 +37,8 @@ steps:
         git clone https://$(GH_TOKEN)@github.com/$(resourcesRepo) $(resourcesDir)
       }
       cd $(resourcesDir)
-      git checkout .
-      git reset --hard origin/master
+      git checkout beijing
+      git reset --hard origin/beijing
       git lfs pull
       git pull
       git clean -fd
@@ -55,8 +54,9 @@ steps:
 
 - script: |
     cd $(Agent.HomeDirectory)
-    rmdir /S /Q azure_outputs
-    mkdir azure_outputs
+    git checkout beijing
+    rmdir /S /Q bti_azure_outputs
+    mkdir bti_azure_outputs
     $(System.DefaultWorkingDirectory)\$(program).exe $(System.DefaultWorkingDirectory)\$(config)
   displayName: Run rJourney
 
@@ -66,5 +66,5 @@ steps:
 # Expect exact output
 - script: |
     cd $(Agent.HomeDirectory)
-    git diff --no-index --compact-summary --exit-code $(resourcesDir)\azure_target_outputs azure_outputs
+    git diff --no-index --compact-summary --exit-code $(resourcesDir)\bti_azure_target_outputs bti_azure_outputs
   displayName: Compare outputs
