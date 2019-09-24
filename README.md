@@ -12,13 +12,13 @@ FHWA National long distance passenger model
   - Install the [Free Pascal Compiler](https://sourceforge.net/projects/freepascal/)
   - Compile rJourney:
     - Open Terminal in the project folder
-    - run `fpc -Mdelphi rJourney_1_3.pas`
+    - run `fpc -Mdelphi rJourney_1_4.pas`
 
 ### Run rJourney
   - Unzip the inputs into the project folder
   - Open command prompt, PowerShell, or Terminal in the project folder
-  - run `rJourney_1_3.exe .\rJourney_example_config.txt`
-  - (Mac/Linux: `./rJourney_1_3 ./rJourney_example_config.txt`)
+  - run `rJourney_1_4.exe .\rJourney_example_config.txt`
+  - (Mac/Linux: `./rJourney_1_4 ./rJourney_example_config.txt`)
 
 ### Documentation
   - Additional resources, example configs, and documentation can be found at [rJourney_resources](https://github.com/rsginc/rjourney_resources)

@@ -19,7 +19,7 @@ variables:
   resourcesDir: $(Agent.HomeDirectory)\rJourney_resources
   resourcesRepo: RSGInc/rJourney_resources.git
   config: rJourney_azure_config.txt
-  program: rJourney_1_3
+  program: rJourney_1_4
 
   # https://sourceforge.net/projects/freepascal/
   fpc: C:\ProgramData\Lazarus\fpc\3.0.4\bin\x86_64-win64\fpc.exe
@@ -38,10 +38,9 @@ steps:
         git clone https://$(GH_TOKEN)@github.com/$(resourcesRepo) $(resourcesDir)
       }
       cd $(resourcesDir)
-      git checkout .
+      git pull
       git reset --hard origin/master
       git lfs pull
-      git pull
       git clean -fd
 
 # Flags:

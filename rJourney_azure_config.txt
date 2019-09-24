@@ -1,4 +1,4 @@
-RunTitle                      FHWA_rJourney_Long_Distance_Model_1_3_Azure_Run
+RunTitle                      FHWA_rJourney_Long_Distance_Model_1_4_Azure_Run
 RunInBatchMode                T
 MonthOfYear                   0
 EachDayOfTheMonth             F
@@ -7,15 +7,7 @@ Sample1inX                    1
 SampleOffset                  0
 WriteHouseholdRecords         T
 WriteTourRecords              T
-WriteAutoVehicleTripMatrix    T
-WriteAutoPersonTripMatrix     T
-WriteBusPersonTripMatrix      T
-WriteRailPersonTripMatrix     T
-WriteAirPersonTripMatrix      T
-UseProbabilitiesinMatrices    F
-UseADTUnitsInMatrices         T
 AutoOperatingCentsPerMile     25
-TripMatrixMinimumDistance     100
 ScenarioPercentIncomeChange   0
 ScenarioPercentAutoCostChange 0
 ScenarioPercentAutoTimeChange 0
@@ -23,7 +15,6 @@ ScenarioPercentAirFareChange  0
 ScenarioPercentRailTimeChange 0
 OutputFileDelimeter           44
 OutputDirectoryName           azure_outputs
-InputDirectoryName            rJourney_resources\azure_inputs
 HouseholdOutputFileName       household_azure_output.csv
 TourOutputFileName            tour_azure_output.csv
 AutoVehicleTripMatrixFileName auto_vtrip_azure_output.csv
@@ -31,9 +22,10 @@ AutoPersonTripMatrixFileName  auto_ptrip_azure_output.csv
 BusPersonTripMatrixFileName   bus_ptrip_azure_output.csv
 RailPersonTripMatrixFileName  rail_ptrip_azure_output.csv
 AirPersonTripMatrixFileName   air_ptrip_azure_output.csv
-RoadLOSFileName               zoneRoadLOS.dat
-RailLOSFileName               zoneRailLOS.dat
-AirLOSFileName                zoneAirLOS.dat
+InputDirectoryName            rJourney_resources\azure_inputs
+RoadLOSFileName               roadLOS_rt.dat
+RailLOSFileName               railLOS_rt.dat
+AirLOSFileName                airLOS_rt.dat
 ZoneLandUseFileName           numa_2010_landuse.dat
 HouseholdFileName             us_synpop_hh3_500_zone_sample.dat
 numberOfHouseholds            20867354
