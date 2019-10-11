@@ -3,7 +3,7 @@ program rJourney_1_4;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils;
+  SysUtils, omxmatrix;
 
 type integer = longint;
 
@@ -45,6 +45,11 @@ begin
        or (dirname[length(dirname)]='/') or (filename[1]='/')
      then setFileName:=SetDirSeparators(dirname+filename)
   else setFileName:=SetDirSeparators(dirname+'\'+filename);
+end;
+
+function fileIsOmx(filename:string):boolean;
+begin
+  fileIsOmx:= pos('.omx', filename) > 0
 end;
 
 {Constants}
@@ -430,17 +435,29 @@ begin
   nZones:=index;
 end;
 
-{**** Code to declare and load road LOS matrices ****}
+{**** Code to declare and load LOS matrices ****}
+
+function getOMXrow(omx:TOMXMatrix; tablename:string; row:integer):zoneMatrix;
+var omxDataBuffer:zoneDouble; matrixRow:zoneMatrix; zindex:integer;
+begin
+  omx.getRow(tablename, row, @(omxDataBuffer[1]));
+  for zindex:=1 to nZones do matrixRow[zindex]:=round(omxDataBuffer[zindex]);
+  getOMXrow:=matrixRow;
+end;
 
 var carDist,carTime,carToll,busTime,busFare:zoneMatrix;
-    roadLosInf:text;
+    roadLosInf:text; omxRoad:TOMXMatrix; useOMXroad:boolean=False;
 
 procedure openRoadLOSMatrices(filename:string);
 begin
   filename:=setFileName(InputDirectoryName,filename);
   writeln(logFile,'Opening Road LOS Matrices file ',filename);
   writeln('Opening Road LOS Matrices file ',filename);
-  resetTextFile(roadlosinf,filename);
+  if fileIsOmx(filename) then begin
+    omxRoad:=TOMXMatrix.Create();
+    omxRoad.openFile(filename);
+    useOMXroad:=True;
+  end else resetTextFile(roadlosinf,filename);
   copercpm:=copercpm*(1.0+scenarioAutoCostChange/100.0);
 end;
 procedure readRoadLOSMatrices(hzone:integer);
@@ -450,7 +467,13 @@ begin
   zonesConnected:=0;
   ldZonesConnected:=0;
 
-  repeat
+  if useOMXroad then begin
+    carTime:=getOMXrow(omxRoad, 'carTime', hzone);
+    carDist:=getOMXrow(omxRoad, 'carDist', hzone);
+    carToll:=getOMXrow(omxRoad, 'carToll', hzone);
+    busTime:=getOMXrow(omxRoad, 'busTime', hzone);
+    busFare:=getOMXrow(omxRoad, 'busFare', hzone);
+  end else repeat
     for dindex:=1 to nZones do begin
       readln(roadlosinf, oIndex,d,
       carTime[dIndex],
@@ -466,27 +489,43 @@ begin
     if carDist[dindex]/2.0>=50 then ldZonesConnected:=ldZonesConnected+1;
     carTime[dindex]:=round(carTime[dindex]*(1.0+scenarioAutoTimeChange/100.0));
     carToll[dIndex]:=round(min(65000,carToll[dIndex]*(1.0+scenarioAutoCostChange/100.0)));
-  end
+  end;
 end;
 procedure closeRoadLOSMatrices;
 begin
-  close(roadlosinf);
+  if useOMXroad then
+    omxRoad.closeFile
+  else
+    close(roadlosinf);
 end;
 
 var railTime, railXfer, railFreq, railEconFare, railBusiFare, railAcEgDist, railOrigStation, railDestStation :zoneMatrix;
-    raillosinf:text;
+    raillosinf:text; omxRail:TOMXMatrix; useOMXrail:boolean=False;
 
 procedure openRailLOSMatrices(filename:string);
 begin
   filename:=setFileName(InputDirectoryName,filename);
   writeln(logFile,'Opening Rail LOS Matrices file ',filename);
   writeln('Opening Rail LOS Matrices file ',filename);
-  resetTextFile(raillosinf,filename);
+  if fileIsOmx(filename) then begin
+    omxRail:=TOMXMatrix.Create();
+    omxRail.openFile(filename);
+    useOMXrail:=True;
+  end else resetTextFile(raillosinf,filename);
 end;
 procedure readRailLOSMatrices(hzone:integer);
 var d,oIndex,dIndex:integer;
 begin
-  repeat
+  if useOMXrail then begin
+    railTime:=        getOMXrow(omxRail, 'railTime', hzone);
+    railXfer:=        getOMXrow(omxRail, 'railXfer', hzone);
+    railFreq:=        getOMXrow(omxRail, 'railFreq', hzone);
+    railEconFare:=    getOMXrow(omxRail, 'railEconFare', hzone);
+    railBusiFare:=    getOMXrow(omxRail, 'railBusiFare', hzone);
+    railAcEgDist:=    getOMXrow(omxRail, 'railAcEgDist', hzone);
+    railOrigStation:= getOMXrow(omxRail, 'railOrigStation', hzone);
+    railDestStation:= getOMXrow(omxRail, 'railDestStation', hzone);
+  end else repeat
     for dindex:=1 to nZones do begin
       readln(raillosinf,oIndex,d,
       railTime[dIndex],
@@ -506,18 +545,25 @@ begin
 end;
 procedure closeRailLOSMatrices;
 begin
-  close(raillosinf);
+  if useOMXrail then
+    omxRail.closeFile
+  else
+    close(raillosinf);
 end;
 
 var airTime, airXfer, airFreqDirect, airFreq1Stop, airFreq2Stop, airReli30, airEconFare, airBusiFare, airAcEgDist, airOrigAirport, airDestAirport, airOnlyAKHI:zoneMatrix;
-    airlosinf:text;
+    airlosinf:text; omxAir:TOMXMatrix; useOMXair:boolean=False;
 
 procedure openAirLOSMatrices(filename:string);
 begin
   filename:=setFileName(InputDirectoryName,filename);
   writeln(logFile,'Opening Air LOS Matrices file ',filename);
   writeln('Opening Air LOS Matrices file ',filename);
-  resetTextFile(airlosinf,filename);
+  if fileIsOmx(filename) then begin
+    omxAir:=TOMXMatrix.Create();
+    omxAir.openFile(filename);
+    useOMXair:=True;
+  end else resetTextFile(airlosinf,filename);
 end;
 procedure readAirLOSMatrices(hzone:integer);
 var d,oIndex,dIndex,temp1,temp2:integer;  var zonesConnected, ldZonesConnected:integer;
@@ -526,7 +572,20 @@ begin
   zonesConnected:=0;
   ldZonesConnected:=0;
 
-  repeat
+  if useOMXair then begin
+    oIndex:=hzone;
+    airTime:=         getOMXrow(omxAir, 'airTime', hzone);
+    airXfer:=         getOMXrow(omxAir, 'airXfer', hzone);
+    airFreqDirect:=   getOMXrow(omxAir, 'airFreqDirect', hzone);
+    airFreq1Stop:=    getOMXrow(omxAir, 'airFreq1Stop', hzone);
+    airFreq2Stop:=    getOMXrow(omxAir, 'airFreq2Stop', hzone);
+    airReli30:=       getOMXrow(omxAir, 'airReli30', hzone);
+    airEconFare:=     getOMXrow(omxAir, 'airEconFare', hzone);
+    airBusiFare:=     getOMXrow(omxAir, 'airBusiFare', hzone);
+    airAcEgDist:=     getOMXrow(omxAir, 'airAcEgDist', hzone);
+    airOrigAirport:=  getOMXrow(omxAir, 'airOrigAirport', hzone);
+    airDestAirport:=  getOMXrow(omxAir, 'airDestAirport', hzone);
+  end else repeat
     for dindex:=1 to nZones do begin
       readln(airlosinf,oIndex,d,
       airTime[dIndex],
@@ -566,7 +625,10 @@ begin
 end;
 procedure closeAirLOSMatrices;
 begin
-  close(airlosinf);
+  if useOMXair then
+    omxAir.closeFile
+  else
+    close(airlosinf);
 end;
 
 var ouf:text;

@@ -23,9 +23,9 @@ BusPersonTripMatrixFileName   bus_ptrip_test1.csv
 RailPersonTripMatrixFileName  rail_ptrip_test1.csv
 AirPersonTripMatrixFileName   air_ptrip_test1.csv
 InputDirectoryName            inputs
-RoadLOSFileName               roadLOS_rt.dat
-RailLOSFileName               railLOS_rt.dat
-AirLOSFileName                airLOS_rt.dat
+RoadLOSFileName               roadLOS.omx
+RailLOSFileName               railLOS.omx
+AirLOSFileName                airLOS.omx
 ZoneLandUseFileName           numa_2010_landuse.dat
 HouseholdFileName             us_synpop_hh3_sorted.dat
 numberOfHouseholds            114736858
