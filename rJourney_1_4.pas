@@ -460,10 +460,13 @@ begin
       busFare[dIndex]);
     end;
   until (oIndex=hzone);
-  if carDist[dindex]>0 then zonesConnected:=zonesConnected+1;
-  if carDist[dindex]/2.0>=50 then ldZonesConnected:=ldZonesConnected+1;
-  carTime[dindex]:=round(carTime[dindex]*(1.0+scenarioAutoTimeChange/100.0));
-  carToll[dIndex]:=round(min(65000,carToll[dIndex]*(1.0+scenarioAutoCostChange/100.0)));
+
+  for dindex:=1 to nZones do begin
+    if carDist[dindex]>0 then zonesConnected:=zonesConnected+1;
+    if carDist[dindex]/2.0>=50 then ldZonesConnected:=ldZonesConnected+1;
+    carTime[dindex]:=round(carTime[dindex]*(1.0+scenarioAutoTimeChange/100.0));
+    carToll[dIndex]:=round(min(65000,carToll[dIndex]*(1.0+scenarioAutoCostChange/100.0)));
+  end
 end;
 procedure closeRoadLOSMatrices;
 begin
@@ -497,7 +500,9 @@ begin
     end;
   until (oIndex=hzone);
 
-  railTime[dindex]:=round(min(650000,railTime[dindex]*(1.0+scenarioRailTimeChange/100.0)));
+  for dindex:=1 to nZones do begin
+    railTime[dindex]:=round(min(650000,railTime[dindex]*(1.0+scenarioRailTimeChange/100.0)));
+  end;
 end;
 procedure closeRailLOSMatrices;
 begin
@@ -538,24 +543,26 @@ begin
     end;
   until (oIndex=hzone);
 
-  airBusiFare[dIndex]:=round((airBusiFare[dIndex]+airEconFare[dIndex])/2.0);
-  airEconFare[dindex]:=round(min(65000,airEconFare[dindex]*(1.0+scenarioAirFareChange/100.0)));
-  airBusiFare[dindex]:=round(min(65000,airBusiFare[dindex]*(1.0+scenarioAirFareChange/100.0)));
+  for dindex:=1 to nZones do begin
+    airBusiFare[dIndex]:=round((airBusiFare[dIndex]+airEconFare[dIndex])/2.0);
+    airEconFare[dindex]:=round(min(65000,airEconFare[dindex]*(1.0+scenarioAirFareChange/100.0)));
+    airBusiFare[dindex]:=round(min(65000,airBusiFare[dindex]*(1.0+scenarioAirFareChange/100.0)));
 
-  {if there is an air connection for alaska and hawaii to 48 estimate car distance, but leave car time at 0}
-  if (carDist[dIndex]=0)
-  and (((zoneState[oIndex]= 2) and (zoneState[dIndex]<> 2))   {alaska-non-alaska}
-   or  ((zoneState[oIndex]=15) and (zoneState[dIndex]<>15))   {hawaii-non-hawaii}
-   or  ((zoneState[dIndex]= 2) and (zoneState[oIndex]<> 2))   {non-alaska-alaska}
-   or  ((zoneState[dIndex]=15) and (zoneState[oIndex]<>15)))  {non-hawaii-hawaii} then begin
-    airOnlyAKHI[dIndex]:=1;
-    temp1:=round(
-    sqrt((zoneLat [oIndex]-zoneLat [dIndex])*(zoneLat [oIndex]-zoneLat [dIndex])*69.0*69.0
-        +(zoneLong[oIndex]-zoneLong[dIndex])*(zoneLong[oIndex]-zoneLong[dIndex])*65.0*65.0));
-    carDist[dIndex]:=temp1*2;
+    {if there is an air connection for alaska and hawaii to 48 estimate car distance, but leave car time at 0}
+    if (carDist[dIndex]=0)
+    and (((zoneState[oIndex]= 2) and (zoneState[dIndex]<> 2))   {alaska-non-alaska}
+     or  ((zoneState[oIndex]=15) and (zoneState[dIndex]<>15))   {hawaii-non-hawaii}
+     or  ((zoneState[dIndex]= 2) and (zoneState[oIndex]<> 2))   {non-alaska-alaska}
+     or  ((zoneState[dIndex]=15) and (zoneState[oIndex]<>15)))  {non-hawaii-hawaii} then begin
+      airOnlyAKHI[dIndex]:=1;
+      temp1:=round(
+      sqrt((zoneLat [oIndex]-zoneLat [dIndex])*(zoneLat [oIndex]-zoneLat [dIndex])*69.0*69.0
+          +(zoneLong[oIndex]-zoneLong[dIndex])*(zoneLong[oIndex]-zoneLong[dIndex])*65.0*65.0));
+      carDist[dIndex]:=temp1*2;
+    end;
+
+    if airtime[dindex]>0 then zonesConnected:=zonesConnected+1;
   end;
-
-  if airtime[dindex]>0 then zonesConnected:=zonesConnected+1;
 end;
 procedure closeAirLOSMatrices;
 begin
