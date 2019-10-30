@@ -14,7 +14,7 @@ ScenarioPercentAutoTimeChange 0
 ScenarioPercentAirFareChange  0
 ScenarioPercentRailTimeChange 0
 OutputFileDelimeter           44
-OutputDirectoryName           azure_outputs
+OutputDirectoryName           azure_dat_outputs
 HouseholdOutputFileName       household_azure_output.csv
 TourOutputFileName            tour_azure_output.csv
 AutoVehicleTripMatrixFileName auto_vtrip_azure_output.csv

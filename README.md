@@ -1,11 +1,12 @@
 # rJourney
 FHWA National long distance passenger model
 
+[![Build Status](https://dev.azure.com/ResourceSystemsGroup/Modeling%20Software/_apis/build/status/RSGInc.rJourney?branchName=master)](https://dev.azure.com/ResourceSystemsGroup/Modeling%20Software/_build/latest?definitionId=8&branchName=master)
+
 ### Download the HDF5 library, command line model, and input files
-  - Download and install [hdf5-1.8.19-Std-win10_64-vs2015.zip](https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.19/bin/windows/hdf5-1.8.19-Std-win10_64-vs2015.zip)
-  - Go to https://github.com/rsginc/rjourney
   - Select Clone or Download and then Download Zip
   - Download the [large inputs file](https://github.com/RSGInc/rJourney_resources/raw/master/inputs.zip)
+  - Download and install [hdf5-1.8.19-Std-win10_64-vs2015.zip](https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.19/bin/windows/hdf5-1.8.19-Std-win10_64-vs2015.zip)
   - Optional: Download the [text versions](https://github.com/RSGInc/rJourney_resources/raw/master/text_inputs.zip) of the input matrices (default is OMX)
   - Optional: Download the [500-zone sample household file](https://github.com/RSGInc/rJourney_resources/blob/master/azure_inputs/us_synpop_hh3_500_zone_sample.dat) for faster runtime
 

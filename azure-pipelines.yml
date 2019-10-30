@@ -12,36 +12,38 @@ trigger:
     - master
     - '*azure*'
 
-# win64
-pool: RSGLocal-Builds
+# system requirements:
+# win64, fpc (64-bit), git, git-lfs, HDF5-1.8.19
+pool: WRJSOFPPW01
+
+strategy:
+  maxParallel: 2
+  matrix:
+    DAT:
+      config: rJourney_azure_dat_config.txt
+      outputs: azure_dat_outputs
+    OMX:
+      config: rJourney_azure_omx_config.txt
+      outputs: azure_omx_outputs
 
 variables:
   resourcesDir: $(Agent.HomeDirectory)\rJourney_resources
   resourcesRepo: RSGInc/rJourney_resources.git
-  config: rJourney_azure_config.txt
   program: rJourney_1_4
 
-  # https://sourceforge.net/projects/freepascal/
-  fpc: C:\ProgramData\Lazarus\fpc\3.0.4\bin\x86_64-win64\fpc.exe
-
 steps:
-- script: $(fpc) -h
+- script: fpc -h
   displayName: Check FPC
 
 # Use git lfs to pull entire data files, not just pointers
-- task: PowerShell@2
+- script: |
+    if not exist $(resourcesDir) git clone https://$(GH_TOKEN)@github.com/$(resourcesRepo) $(resourcesDir)
+    cd $(resourcesDir)
+    git pull
+    git reset --hard origin/master
+    git lfs pull
+    git clean -fd
   displayName: Get latest test data
-  inputs:
-    targetType: inline
-    script: |
-      if ( !(Test-Path "$(resourcesDir)") ) {
-        git clone https://$(GH_TOKEN)@github.com/$(resourcesRepo) $(resourcesDir)
-      }
-      cd $(resourcesDir)
-      git pull
-      git reset --hard origin/master
-      git lfs pull
-      git clean -fd
 
 # Flags:
 #   -Co fails build if integer overflow is detected
@@ -49,21 +51,20 @@ steps:
 - script: |
     cd $(System.DefaultWorkingDirectory)
     git clean -fd
-    $(fpc) -Co -Mdelphi .\$(program).pas
+    fpc -Mdelphi -Co -Ci -CR -Sh .\$(program).pas
   displayName: Compile rJourney
 
 - script: |
     cd $(Agent.HomeDirectory)
-    rmdir /S /Q azure_outputs
-    mkdir azure_outputs
+    rmdir /S /Q $(outputs)
+    mkdir $(outputs)
     $(System.DefaultWorkingDirectory)\$(program).exe $(System.DefaultWorkingDirectory)\$(config)
   displayName: Run rJourney
 
 - script: type $(System.DefaultWorkingDirectory)\*.log
   displayName: Show logfile
 
-# Expect exact output
 - script: |
     cd $(Agent.HomeDirectory)
-    git diff --no-index --compact-summary --exit-code $(resourcesDir)\azure_target_outputs azure_outputs
+    git diff --no-index --compact-summary --exit-code $(resourcesDir)\azure_target_outputs $(outputs)
   displayName: Compare outputs

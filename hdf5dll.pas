@@ -3283,7 +3283,6 @@ constructor THDF5Dll.Create(APath: string);
 begin
   inherited Create;
   FHandle := LoadLibrary(PChar(APath));
-  writeln('FHandle: ', FHandle);
 
   @FH5open := GetDllProc(FHandle, 'H5open');
   @FH5close := GetDllProc(FHandle, 'H5close');
