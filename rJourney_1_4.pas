@@ -299,7 +299,7 @@ end;
 {array dimensions}
 const
  nTracts = 73057;
- mZones =  10999;
+ mZones =  12000;
  maxZone = 99999;
  nCensDivs = 10;
  censDivLabel:array[1..nCensDivs] of string=('New Eng','Mid Atl','NE Cent','NW Cent','Sou Atl','SE Cent','SW Cent','Mountn ','Pacific','AK & HI');
