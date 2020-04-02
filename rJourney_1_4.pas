@@ -196,7 +196,7 @@ const configfname:string='rJourney_example_config.txt';
 var nlogs:integer;
 begin
   if paramCount>0 then configfname:=paramStr(1) else begin
-    writeln('<<<< FHWA National Long Distance Passenger Model >>>> (c) 2015-2020 RSG');
+    writeln('<<<< FHWA National Long Distance Passenger Model >>>> (c) 2015-2020  RSG');
     write('Enter the configuration settings filename : '); readln(configfname);
   end;
   nlogs:=0;

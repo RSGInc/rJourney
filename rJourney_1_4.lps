@@ -9,8 +9,8 @@
         <Filename Value="rJourney_1_4.pas"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="1273"/>
-        <CursorPos X="2" Y="1308"/>
+        <TopLine Value="156"/>
+        <CursorPos X="83" Y="200"/>
         <UsageCount Value="21"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -41,7 +41,7 @@
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
     </Units>
-    <JumpHistory Count="11" HistoryIndex="10">
+    <JumpHistory Count="12" HistoryIndex="11">
       <Position1>
         <Filename Value="rJourney_1_4.pas"/>
         <Caret Line="1912" Column="5" TopLine="1860"/>
@@ -85,6 +85,10 @@
         <Filename Value="rJourney_1_4.pas"/>
         <Caret Column="41"/>
       </Position11>
+      <Position12>
+        <Filename Value="rJourney_1_4.pas"/>
+        <Caret Line="1308" Column="2" TopLine="1273"/>
+      </Position12>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>
