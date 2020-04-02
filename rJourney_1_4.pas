@@ -3,7 +3,7 @@ program rJourney_1_4;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, omxmatrix;
+  SysUtils, omxmatrix, hdf5dll;
 
 type integer = longint;
 
@@ -117,6 +117,7 @@ const
   'comm_psize3.F12',
   'ebus_psize3.F12');
   AOCoefFile:string='inputs\carown3.f12';
+  stateToReadCarOwnershipFromHHFile:integer=0;
   scenarioIncomeChange:single=0;
   scenarioAutoCostChange:single=0;
   scenarioAutoTimeChange:single=0;
@@ -195,7 +196,7 @@ const configfname:string='rJourney_example_config.txt';
 var nlogs:integer;
 begin
   if paramCount>0 then configfname:=paramStr(1) else begin
-    writeln('<<<< FHWA National Long Distance Passenger Model >>>> (c) 2015-2019 RSG');
+    writeln('<<<< FHWA National Long Distance Passenger Model >>>> (c) 2015-2020 RSG');
     write('Enter the configuration settings filename : '); readln(configfname);
   end;
   nlogs:=0;
@@ -279,6 +280,7 @@ begin
         if key='tripmatrixminimumdistance' then TripMatrixMinimumDistance:=checkint(arg,50,5000) else
         if key='useadtunitsinmatrices' then  WriteADT :=checkbool(arg) else
 }       if key='runinbatchmode' then  runInBatchMode :=checkbool(arg) else
+        if key='statetoreadcarownershipfromhhfile' then stateToReadCarOwnershipFromHHFile :=checkint(arg,0,999) else
         if key='autooperatingcentspermile' then copercpm:=checkint(arg,0,1000)/100.0 else
         if key='scenariopercentincomechange' then  scenarioIncomeChange :=checkint(arg,-100,100) else
         if key='scenariopercentautocostchange' then  scenarioAutoCostChange :=checkint(arg,-100,100) else
@@ -658,7 +660,12 @@ end;
 procedure loadNextHouseholdRecord (var lastRecord:boolean);
 begin
   repeat
-    readln(hhInFile, hhId, hhTract, hhZone, hhSize, hhWorkers, hhNonWkrs, hhHasKids, hhHeadAge, hhIncome, hhExpFactor);
+    read(hhInFile, hhId, hhTract, hhZone, hhSize, hhWorkers, hhNonWkrs, hhHasKids, hhHeadAge, hhIncome, hhExpFactor);
+
+    if (stateToReadCarOwnershipFromHHFile=999) or (stateToReadCarOwnershipFromHHFile=zoneState[zoneIndex[hhZone]])
+    then readln(hhInFile, hhVehicles)
+    else readln(hhInFile);
+
     lastRecord:=eof(hhInFile);
   until (lastRecord) or (hhHeadAge>0);
   {transformation variables}
@@ -1374,6 +1381,8 @@ const nAlts=5;
 var alt:integer; target,expusum:double; util,expu:array[1..nAlts] of double; cinf:text; cnum:integer; xstr:string[13];
 
 begin
+ if (stateToReadCarOwnershipFromHHFile<>999) and (stateToReadCarOwnershipFromHHFile<>zoneState[hhZoneIndex]) then begin
+
   if not(autownCoeffsRead) then begin
         {read coefficients}
         resetTextFile(cinf,setFileName(CoefficientDirectoryName,aocoeffile));
@@ -1413,11 +1422,12 @@ begin
   until (target<0) or (alt>=nAlts);
 
   hhVehicles:=alt-1;
-  hhHas0Vehicles:=integer(hhVehicles=0);
-  hhHas1Vehicle:=integer(hhVehicles=1);
-  hhHas2Vehicles:=integer(hhVehicles=2);
-  hhHas3PlusVehicles:=integer(hhVehicles>=3);
-  hhHasCarCompetition:=integer((hhVehicles>0) and (hhVehicles<hhAdults));
+ end;
+ hhHas0Vehicles:=integer(hhVehicles=0);
+ hhHas1Vehicle:=integer(hhVehicles=1);
+ hhHas2Vehicles:=integer(hhVehicles=2);
+ hhHas3PlusVehicles:=integer(hhVehicles>=3);
+ hhHasCarCompetition:=integer((hhVehicles>0) and (hhVehicles<hhAdults));
 
  if hhVehicles=0 then hhModeDestseg:=hhIncseg else
  if hhVehicles<hhAdults then hhModeDestseg:=hhIncseg+5 else hhModeDestseg:=hhIncseg+10;
