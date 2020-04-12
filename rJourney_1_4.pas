@@ -88,35 +88,62 @@ const
  TripMatrixMinimumDistance:integer=50;
  }
  DaysInMonth:array[0..12] of integer=(365, 31,28,31, 30,31,30, 31,31,30, 31,30,31);
+ useSegmentedModels:boolean=False;
+ stateToUseSeparateCoefficientFiles:integer=0;
+
  CoefficientDirectoryName:string = 'coeffcients';
- FrCoefFile:array[1..2] of string =
+ FrCoefFile:array[1..4] of string =
  ('freqest3a.f12',
+  'fsecest3a.f12',
+  'freqest3a.f12',
   'fsecest3a.f12');
- DCCoefFile:array[1..5] of string =
+ DCCoefFile:array[1..10] of string =
  ('pbusdest6_bxc.F12',
   'vfardest6_bxc.F12',
   'leisdest6_bxc.F12',
   'commdest6_bxc.F12',
+  'ebusdest6_bxc.F12',
+  'pbusdest6_bxc.F12',
+  'vfardest6_bxc.F12',
+  'leisdest6_bxc.F12',
+  'commdest6_bxc.F12',
   'ebusdest6_bxc.F12');
- MCCoefFile:array[1..5] of string =
+ MCCoefFile:array[1..10] of string =
  ('pbusmode13_est.F12',
   'vfarmode13_est.F12',
   'leismode13_est.F12',
   'commmode13_est.F12',
+  'ebusmode13_est.F12',
+  'pbusmode13_est.F12',
+  'vfarmode13_est.F12',
+  'leismode13_est.F12',
+  'commmode13_est.F12',
   'ebusmode13_est.F12');
- TDCoefFile:array[1..5] of string =
+ TDCoefFile:array[1..10] of string =
  ('pbus_dur3.F12',
   'vfar_dur3.F12',
   'leis_dur3.F12',
   'comm_dur3.F12',
+  'ebus_dur3.F12',
+  'pbus_dur3.F12',
+  'vfar_dur3.F12',
+  'leis_dur3.F12',
+  'comm_dur3.F12',
   'ebus_dur3.F12');
- PSCoefFile:array[1..5] of string =
+ PSCoefFile:array[1..10] of string =
  ('pbus_psize3.F12',
   'vfar_psize3.F12',
   'leis_psize3.F12',
   'comm_psize3.F12',
+  'ebus_psize3.F12',
+  'pbus_psize3.F12',
+  'vfar_psize3.F12',
+  'leis_psize3.F12',
+  'comm_psize3.F12',
   'ebus_psize3.F12');
-  AOCoefFile:string='inputs\carown3.f12';
+  AOCoefFile:array[1..2] of string=
+  ('carown3.f12',
+   'carown3.f12');
   stateToReadCarOwnershipFromHHFile:integer=0;
   scenarioIncomeChange:single=0;
   scenarioAutoCostChange:single=0;
@@ -236,24 +263,47 @@ begin
         if key='destchoicecoefficientfile_3' then DCCoefFile[3]:=arg else
         if key='destchoicecoefficientfile_4' then DCCoefFile[4]:=arg else
         if key='destchoicecoefficientfile_5' then DCCoefFile[5]:=arg else
+        if key='destchoicecoefficientfile_1x' then DCCoefFile[6]:=arg else
+        if key='destchoicecoefficientfile_2x' then DCCoefFile[7]:=arg else
+        if key='destchoicecoefficientfile_3x' then DCCoefFile[8]:=arg else
+        if key='destchoicecoefficientfile_4x' then DCCoefFile[9]:=arg else
+        if key='destchoicecoefficientfile_5x' then DCCoefFile[10]:=arg else
         if key='modechoicecoefficientfile_1' then MCCoefFile[1]:=arg else
         if key='modechoicecoefficientfile_2' then MCCoefFile[2]:=arg else
         if key='modechoicecoefficientfile_3' then MCCoefFile[3]:=arg else
         if key='modechoicecoefficientfile_4' then MCCoefFile[4]:=arg else
         if key='modechoicecoefficientfile_5' then MCCoefFile[5]:=arg else
+        if key='modechoicecoefficientfile_1x' then MCCoefFile[6]:=arg else
+        if key='modechoicecoefficientfile_2x' then MCCoefFile[7]:=arg else
+        if key='modechoicecoefficientfile_3x' then MCCoefFile[8]:=arg else
+        if key='modechoicecoefficientfile_4x' then MCCoefFile[9]:=arg else
+        if key='modechoicecoefficientfile_5x' then MCCoefFile[10]:=arg else
         if key='partysizecoefficientfile_1' then PSCoefFile[1]:=arg else
         if key='partysizecoefficientfile_2' then PSCoefFile[2]:=arg else
         if key='partysizecoefficientfile_3' then PSCoefFile[3]:=arg else
         if key='partysizecoefficientfile_4' then PSCoefFile[4]:=arg else
         if key='partysizecoefficientfile_5' then PSCoefFile[5]:=arg else
+        if key='partysizecoefficientfile_1x' then PSCoefFile[6]:=arg else
+        if key='partysizecoefficientfile_2x' then PSCoefFile[7]:=arg else
+        if key='partysizecoefficientfile_3x' then PSCoefFile[8]:=arg else
+        if key='partysizecoefficientfile_4x' then PSCoefFile[9]:=arg else
+        if key='partysizecoefficientfile_5x' then PSCoefFile[10]:=arg else
         if key='nightsawaycoefficientfile_1' then TDCoefFile[1]:=arg else
         if key='nightsawaycoefficientfile_2' then TDCoefFile[2]:=arg else
         if key='nightsawaycoefficientfile_3' then TDCoefFile[3]:=arg else
         if key='nightsawaycoefficientfile_4' then TDCoefFile[4]:=arg else
         if key='nightsawaycoefficientfile_5' then TDCoefFile[5]:=arg else
+        if key='nightsawaycoefficientfile_1x' then TDCoefFile[6]:=arg else
+        if key='nightsawaycoefficientfile_2x' then TDCoefFile[7]:=arg else
+        if key='nightsawaycoefficientfile_3x' then TDCoefFile[8]:=arg else
+        if key='nightsawaycoefficientfile_4x' then TDCoefFile[9]:=arg else
+        if key='nightsawaycoefficientfile_5x' then TDCoefFile[10]:=arg else
         if key='tourfreqcoefficientsfile_1' then  FrCoefFile[1] :=arg else
         if key='tourfreqcoefficientsfile_2' then  FrCoefFile[2] :=arg else
-        if key='autoowncoefficientsfile' then  AOCoefFile :=arg else
+        if key='tourfreqcoefficientsfile_1x' then  FrCoefFile[3] :=arg else
+        if key='tourfreqcoefficientsfile_2x' then  FrCoefFile[4] :=arg else
+        if key='autoowncoefficientsfile' then  AOCoefFile[1] :=arg else
+        if key='autoowncoefficientsfilex' then  AOCoefFile[2] :=arg else
         if key='outputdirectoryname' then OutputDirectoryName:=arg else
         if key='householdoutputfilename' then  HouseholdDayFileName :=arg else
         if key='touroutputfilename' then  TourFileName :=arg else
@@ -281,6 +331,10 @@ begin
         if key='useadtunitsinmatrices' then  WriteADT :=checkbool(arg) else
 }       if key='runinbatchmode' then  runInBatchMode :=checkbool(arg) else
         if key='statetoreadcarownershipfromhhfile' then stateToReadCarOwnershipFromHHFile :=checkint(arg,0,999) else
+        if key='statetouseseparatecoefficientfiles' then begin
+            stateToUseSeparateCoefficientFiles:=checkint(arg,0,999);
+            if (stateToUseSeparateCoefficientFiles > 0) then useSegmentedModels:=True;
+        end else
         if key='autooperatingcentspermile' then copercpm:=checkint(arg,0,1000)/100.0 else
         if key='scenariopercentincomechange' then  scenarioIncomeChange :=checkint(arg,-100,100) else
         if key='scenariopercentautocostchange' then  scenarioAutoCostChange :=checkint(arg,-100,100) else
@@ -640,8 +694,7 @@ var hhId, hhZone, hhSize, hhWorkers, hhNonWkrs, hhHasKids, hhHeadAge, hhIncome: 
     hhLogIncome, hhZoneDensity, hhLogDensity, hhWorkerRatio, hhWorkerRatio2:single;
     hhZoneIndex, hhRural, hhUrban, hhHeadUnder35, hhHeadOver65, hhAdults, hh1Adult, hh3Adults, hh4PlusAdults,
     hhVehicles, hhHas1Vehicle, hhHas2Vehicles, hhHas3PlusVehicles, hhHas0Vehicles, hhHasCarCompetition,
-    hhIncSeg,hhModeDestSeg:integer;  hhTract:double;
-
+    hhIncSeg,hhModeDestSeg,hhModelSegment:integer;  hhTract:double;
     hhInFile:text;
 
 procedure openHouseholdInputFile(filename:string);
@@ -693,11 +746,18 @@ begin
   if hhIncome>= 65000 then hhIncseg:=3 else
   if hhIncome>= 35000 then hhIncseg:=2 else hhIncseg:=1;
 
+  if (stateToUseSeparateCoefficientFiles>0) and (stateToUseSeparateCoefficientFiles=zoneState[hhZoneIndex])
+    then begin
+      hhModelSegment:=2;
+    end else begin
+      hhModelSegment:=1;
+    end;
 end;
 
 { *** CODE TO DECLARE AND WRITE HOUSEHOLD OUTPUT VARIABLES *** }
 
 const nTourPurposes = 5;
+      nCoefPurposes = 10;
       PersBusPurp = 1;
       VisitPurp = 2;
       LeisurePurp = 3;
@@ -1006,12 +1066,12 @@ var  accessibilityLogsums:array[1..nHHSegs,1..nTourPurposes,1..nDistBands] of do
      destProb:array[1..nHHSegs,1..nTourPurposes,1..nPSSegs,1..nNASegs,1..nMOSegs,0..mZones] of double;
      hhsegLogIncome,hhsegIncomeFac:array[1..nHHSegs] of single;
      pssegCostFac:array[1..nPSSegs,1..nTourPurposes] of single;
-     sizeFunction,destutil:array[1..nTourPurposes,1..mZones] of double;
+     sizeFunction,destutil:array[1..nCoefPurposes,1..mZones] of double;
      logsumsInitialized:boolean=false;
      modeCoeffsRead:boolean=false;
-     MCCoef:array[1..nTourPurposes,1..maxmccoef] of single;
+     MCCoef:array[1..nCoefPurposes,1..maxmccoef] of single;
      destCoeffsRead:boolean=false;
-     DCCoef:array[1..nTourPurposes,1..maxdccoef] of single;
+     DCCoef:array[1..nCoefPurposes,1..maxdccoef] of single;
 
 procedure calculateModeDestinationProbabilities(otaz:integer);
 const coefplabel:array[1..nTourPurposes] of string=('pbus','vfar','leis','comm','ebus');
@@ -1052,7 +1112,7 @@ const coefplabel:array[1..nTourPurposes] of string=('pbus','vfar','leis','comm',
     maxairfare:array[1..NTourPurposes] of integer= (4000,4000,4000,2000,8000);
 
 var xstr:string[13];
-    purp,hhseg,psseg,naseg,moseg,dtaz,z,cnum,dband,mode:integer;
+    purpadd,purp,hhseg,psseg,naseg,moseg,dtaz,z,nmsegs,mseg,cnum,dband,mode:integer;
     siz0,siz1,siz2,siz3,siz4:single;
     railfare,airfare,railfreqx,airfreqx,
     carutilx,busutilx,railutilx,airutilx,
@@ -1066,31 +1126,34 @@ begin
     logsumsInitialized:=true;
   {if first zone, initialize coefficients and other global vars}
 
+
     if not(modeCoeffsRead) then begin
-      for purp:=1 to nTourPurposes do begin
+      if UseSegmentedModels then nmsegs:=10 else nmsegs:=5;
+      for mseg:=1 to nmsegs do begin
         {read coefficients}
-        resetTextFile(cinf,setFileName(CoefficientDirectoryName,mccoeffile[purp]));
+        resetTextFile(cinf,setFileName(CoefficientDirectoryName,mccoeffile[mseg]));
         repeat readln(cinf,xstr) until (copy(xstr,1,3)='END');
         repeat
           read(cinf,cnum);
           {write(purp,' ',cnum); readln;}
-          if (cnum>=0) and (cnum<=maxmccoef) then readln(cinf,xstr,MCCoef[purp,cnum]) else readln(cinf);
+          if (cnum>=0) and (cnum<=maxmccoef) then readln(cinf,xstr,MCCoef[mseg,cnum]) else readln(cinf);
         until cnum<0;
         close(cinf);
       end;
       modeCoeffsRead:=true;
     end;
     if not(destCoeffsRead) then begin
-      for purp:=1 to nTourPurposes do begin
+      if UseSegmentedModels then nmsegs:=10 else nmsegs:=5;
+      for mseg:=1 to nmsegs do begin
         {read coefficients}
-        resetTextFile(cinf,setFileName(CoefficientDirectoryName,dccoeffile[purp]));
+        resetTextFile(cinf,setFileName(CoefficientDirectoryName,dccoeffile[mseg]));
         repeat readln(cinf,xstr) until (copy(xstr,1,3)='END');
         repeat
           read(cinf,cnum);
           {write(purp,' ',cnum); readln;}
-          if (cnum>=0) and (cnum<=maxdccoef) then readln(cinf,xstr,DCCoef[purp,cnum]) else readln(cinf);
+          if (cnum>=0) and (cnum<=maxdccoef) then readln(cinf,xstr,DCCoef[mseg,cnum]) else readln(cinf);
           {exponentiate size coefficients}
-          if (cnum>=firstsizevar) and (cnum<=lastsizevar) then DCCoef[purp,cnum]:=exp(DCCoef[purp,cnum]);
+          if (cnum>=firstsizevar) and (cnum<=lastsizevar) then DCCoef[mseg,cnum]:=exp(DCCoef[mseg,cnum]);
         until cnum<0;
         close(cinf);
       end;
@@ -1151,13 +1214,21 @@ begin
          + DCCoef[purp,23]*siz3
          + DCCoef[purp,24]*siz4));
 
+        if useSegmentedModels then
+        sizeFunction[purp+nTourPurposes,dtaz]:=DCCoef[purp+nTourPurposes,logsizemult]*ln(max(1E-10,siz0
+         + DCCoef[purp+nTourPurposes,21]*siz1
+         + DCCoef[purp+nTourPurposes,22]*siz2
+         + DCCoef[purp+nTourPurposes,23]*siz3
+         + DCCoef[purp+nTourPurposes,24]*siz4));
+
       end;
     end;
   end;
 
-  {for otaz:=1 to nzones do} begin
-    {if (otaz mod 100=0) or (otaz=nzones) then write(otaz:8);}
+  {if hh zone is for model segment 2, add NTourPurposes to all coefficient purpose indices}
+  if hhModelSegment=2 then purpAdd:=NTourPurposes else purpAdd:=0;
 
+  {for otaz:=1 to nzones do} begin
     for hhseg:=1 to nHHSegs do
     for purp:=1 to nTourPurposes do begin
       for dband:=1 to nDistBands do accessibilityLogsums[hhseg,purp,dband]:=0;
@@ -1182,22 +1253,22 @@ begin
 
       for purp:=1 to nTourPurposes do begin
 
-        destutil[purp,dtaz]:= sizeFunction[purp,dtaz]
-         + DCCoef[purp,2] * lncdist
-         + DCCoef[purp,3] * cdistsq
-         + DCCoef[purp,7] * ifin(carDist1way,50,99.99)
-         + DCCoef[purp,8] * ifin(cardist1way,100,149.99)
-         + DCCoef[purp,9] * ifin(cardist1way,150,249.99)
-         + DCCoef[purp,10]* ifin(cardist1way,250,499.99)
-         + DCCoef[purp,11]* ifin(cardist1way,500,999.99)
-         + DCCoef[purp,12]* ifin(cardist1way,1000,1499.99)
-         + DCCoef[purp,13]* ifin(cardist1way,1500,1999.99)
-         + DCCoef[purp,14]* ifge(cardist1way,2000)*(1-airOnlyAKHI[dtaz])
-         + DCCoef[purp,19]* airOnlyAKHI[dtaz]
-         + DCCoef[purp,15]* zUrban[dtaz]
-         + DCCoef[purp,16]* zRural[dtaz]
-         + DCCoef[purp,17]* (zUrban[dtaz]*zUrban[otaz])
-         + DCCoef[purp,18]* (zRural[dtaz]*zRural[otaz]);
+        destutil[purp,dtaz]:= sizeFunction[purp+purpAdd,dtaz]
+         + DCCoef[purp+purpAdd,2] * lncdist
+         + DCCoef[purp+purpAdd,3] * cdistsq
+         + DCCoef[purp+purpAdd,7] * ifin(carDist1way,50,99.99)
+         + DCCoef[purp+purpAdd,8] * ifin(cardist1way,100,149.99)
+         + DCCoef[purp+purpAdd,9] * ifin(cardist1way,150,249.99)
+         + DCCoef[purp+purpAdd,10]* ifin(cardist1way,250,499.99)
+         + DCCoef[purp+purpAdd,11]* ifin(cardist1way,500,999.99)
+         + DCCoef[purp+purpAdd,12]* ifin(cardist1way,1000,1499.99)
+         + DCCoef[purp+purpAdd,13]* ifin(cardist1way,1500,1999.99)
+         + DCCoef[purp+purpAdd,14]* ifge(cardist1way,2000)*(1-airOnlyAKHI[dtaz])
+         + DCCoef[purp+purpAdd,19]* airOnlyAKHI[dtaz]
+         + DCCoef[purp+purpAdd,15]* zUrban[dtaz]
+         + DCCoef[purp+purpAdd,16]* zRural[dtaz]
+         + DCCoef[purp+purpAdd,17]* (zUrban[dtaz]*zUrban[otaz])
+         + DCCoef[purp+purpAdd,18]* (zRural[dtaz]*zRural[otaz]);
 
         if purp<5 then railfare:=railEconFare[dtaz]
                   else railfare:=railBusiFare[dtaz];
@@ -1215,45 +1286,45 @@ begin
         if airfreqx<1 then airfreqx:=1;
 
         if (carTime[dtaz]<=0) then carutilx:=-999 else
-        carutilx:= MCCoef[purp,11]* carTime[dtaz];
+        carutilx:= MCCoef[purp+purpAdd,11]* carTime[dtaz];
 
         if (busTime[dtaz]<=0) then busutilx:=-999 else
-        busutilx:= MCCoef[purp,21]* busTime[dtaz];
+        busutilx:= MCCoef[purp+purpAdd,21]* busTime[dtaz];
 
         if (railTime[dtaz]<=0) then railutilx:=-999 else
-        railutilx:= MCCoef[purp,31]*railTime[dtaz]
-                 +  MCCoef[purp,32]*railXfer[dtaz]/100.0
-                 +  MCCoef[purp,33]*sqrt(railfreqx)
-                 +  MCCoef[purp,34]*railAcEgDist[dtaz];
+        railutilx:= MCCoef[purp+purpAdd,31]*railTime[dtaz]
+                 +  MCCoef[purp+purpAdd,32]*railXfer[dtaz]/100.0
+                 +  MCCoef[purp+purpAdd,33]*sqrt(railfreqx)
+                 +  MCCoef[purp+purpAdd,34]*railAcEgDist[dtaz];
         if carDist[dtaz]>0 then railutilx:=railutilx
-                 +  MCCoef[purp,35]*(railAcEgDist[dtaz]/carDist[dtaz] - 0.33);
+                 +  MCCoef[purp+purpAdd,35]*(railAcEgDist[dtaz]/carDist[dtaz] - 0.33);
 
         if (airTime[dtaz]<=0) or (carDist[dtaz]/2.0<50) then airutilx:=-999 else  {don't include air connections for car dist 1-49}
-        airutilx:=  MCCoef[purp,41]*airTime[dtaz]
-                 +  MCCoef[purp,42]*airXfer[dtaz]/100.0
-                 +  MCCoef[purp,43]*sqrt(airfreqx)
-                 +  MCCoef[purp,46]*airReli30[dtaz]
-                 +  MCCoef[purp,44]*airAcEgDist[dtaz];
+        airutilx:=  MCCoef[purp+purpAdd,41]*airTime[dtaz]
+                 +  MCCoef[purp+purpAdd,42]*airXfer[dtaz]/100.0
+                 +  MCCoef[purp+purpAdd,43]*sqrt(airfreqx)
+                 +  MCCoef[purp+purpAdd,46]*airReli30[dtaz]
+                 +  MCCoef[purp+purpAdd,44]*airAcEgDist[dtaz];
         if carDist[dtaz]>0 then airutilx:=airutilx
-                 +  MCCoef[purp,45]*(airAcEgDist[dtaz]/carDist[dtaz] - 0.67);
+                 +  MCCoef[purp+purpAdd,45]*(airAcEgDist[dtaz]/carDist[dtaz] - 0.67);
 
         for hhseg:=1 to nhhSegs do begin
           if busutilx>-900 then busutil:=busutilx+
-             MCCoef[purp,10]* busFare[dtaz]/hhsegIncomefac[hhseg]
+             MCCoef[purp+purpAdd,10]* busFare[dtaz]/hhsegIncomefac[hhseg]
           else busutil:=busutilx;
 
           if railutilx>-900 then railutil:=railutilx+
-             MCCoef[purp,10]* railfare/hhsegIncomefac[hhseg]
+             MCCoef[purp+purpAdd,10]* railfare/hhsegIncomefac[hhseg]
           else railutil:=railutilx;
 
          if airutilx>-900 then airutil:=airutilx+
-             MCCoef[purp,10]* airfare/hhsegIncomefac[hhseg]
+             MCCoef[purp+purpAdd,10]* airfare/hhsegIncomefac[hhseg]
          else airutil:=airutilx;
 
          for psseg:=1 to nPSSegs do begin
            if carutilx>-900 then carutil:=carutilx+
-             MCCoef[purp,10]* copercpm * carDist[dtaz]/(pssegCostfac[psseg,purp]*hhsegIncomefac[hhseg])+
-             MCCoef[purp,10]* carToll[dtaz]/100.0/(pssegCostfac[psseg,purp]*hhsegIncomefac[hhseg])
+             MCCoef[purp+purpAdd,10]* copercpm * carDist[dtaz]/(pssegCostfac[psseg,purp]*hhsegIncomefac[hhseg])+
+             MCCoef[purp+purpAdd,10]* carToll[dtaz]/100.0/(pssegCostfac[psseg,purp]*hhsegIncomefac[hhseg])
            else carutil:=carutilx;
 
             for naseg:=1 to nNASegs do begin
@@ -1262,45 +1333,45 @@ begin
 
                 if (carutil<-900) then mexputil[1]:=0 else
                 mexputil[1]:= exp(0
-                 + MCCoef[purp,  1]*carutil
-                 + MCCoef[purp,101]*hhsegNocars[hhseg]
-                 + MCCoef[purp,102]*hhsegCarlta[hhseg]
-                 + MCCoef[purp,103]*pssegSingle[psseg]
-                 + MCCoef[purp,104]*pssegGroup3[psseg]
-                 + MCCoef[purp,105]*nasegDaytrip[naseg]
-                 + MCCoef[purp,106]*nasegWeektrip[naseg]
-                 + MCCoef[purp,110]*mosegSummer[moseg]
-                 + MCCoef[purp,112]*ifge(cardist[dtaz]/2.0,500));
+                 + MCCoef[purp+purpAdd,  1]*carutil
+                 + MCCoef[purp+purpAdd,101]*hhsegNocars[hhseg]
+                 + MCCoef[purp+purpAdd,102]*hhsegCarlta[hhseg]
+                 + MCCoef[purp+purpAdd,103]*pssegSingle[psseg]
+                 + MCCoef[purp+purpAdd,104]*pssegGroup3[psseg]
+                 + MCCoef[purp+purpAdd,105]*nasegDaytrip[naseg]
+                 + MCCoef[purp+purpAdd,106]*nasegWeektrip[naseg]
+                 + MCCoef[purp+purpAdd,110]*mosegSummer[moseg]
+                 + MCCoef[purp+purpAdd,112]*ifge(cardist[dtaz]/2.0,500));
 
                 if (busutil<-900) then mexputil[2]:=0 else
                 mexputil[2]:= exp(0
-                 + MCCoef[purp,  1]*busutil
-                 + MCCoef[purp,200]
-                 + MCCoef[purp,208]*hhsegLogincome[hhseg]
-                 + MCCoef[purp,209]*zLogdens[otaz]
-                 + MCCoef[purp,210]*zLogdens[dtaz]
-                 + MCCoef[purp,215]*iflt(cardist[dtaz]/2.0,150));
+                 + MCCoef[purp+purpAdd,  1]*busutil
+                 + MCCoef[purp+purpAdd,200]
+                 + MCCoef[purp+purpAdd,208]*hhsegLogincome[hhseg]
+                 + MCCoef[purp+purpAdd,209]*zLogdens[otaz]
+                 + MCCoef[purp+purpAdd,210]*zLogdens[dtaz]
+                 + MCCoef[purp+purpAdd,215]*iflt(cardist[dtaz]/2.0,150));
 
                 if (railutil<-900) then mexputil[3]:=0 else
                 mexputil[3]:= exp(0
-                 + MCCoef[purp,  1]*railutil
-                 + MCCoef[purp,300]
-                 + MCCoef[purp,308]*hhsegLogincome[hhseg]
-                 + MCCoef[purp,309]*zLogdens[otaz]
-                 + MCCoef[purp,310]*zLogdens[dtaz]
-                 + MCCoef[purp,315]*iflt(cardist[dtaz]/2.0,150));
+                 + MCCoef[purp+purpAdd,  1]*railutil
+                 + MCCoef[purp+purpAdd,300]
+                 + MCCoef[purp+purpAdd,308]*hhsegLogincome[hhseg]
+                 + MCCoef[purp+purpAdd,309]*zLogdens[otaz]
+                 + MCCoef[purp+purpAdd,310]*zLogdens[dtaz]
+                 + MCCoef[purp+purpAdd,315]*iflt(cardist[dtaz]/2.0,150));
 
                 if (airutil<-900) then mexputil[4]:=0 else
                 mexputil[4]:= exp(0
-                 + MCCoef[purp,  1]*airutil
-                 + MCCoef[purp,400]
-                 + MCCoef[purp,408]*hhsegLogincome[hhseg]
-                 + MCCoef[purp,409]*zLogdens[otaz]
-                 + MCCoef[purp,410]*zLogdens[dtaz]
-                 + MCCoef[purp,411]*nasegDaytrip[naseg]
-                 + MCCoef[purp,412]*nasegNights12[naseg]
-                 + MCCoef[purp,414]*pssegSingle[psseg]
-                 + MCCoef[purp,415]*iflt(cardist[dtaz]/2.0,150));
+                 + MCCoef[purp+purpAdd,  1]*airutil
+                 + MCCoef[purp+purpAdd,400]
+                 + MCCoef[purp+purpAdd,408]*hhsegLogincome[hhseg]
+                 + MCCoef[purp+purpAdd,409]*zLogdens[otaz]
+                 + MCCoef[purp+purpAdd,410]*zLogdens[dtaz]
+                 + MCCoef[purp+purpAdd,411]*nasegDaytrip[naseg]
+                 + MCCoef[purp+purpAdd,412]*nasegNights12[naseg]
+                 + MCCoef[purp+purpAdd,414]*pssegSingle[psseg]
+                 + MCCoef[purp+purpAdd,415]*iflt(cardist[dtaz]/2.0,150));
 
                 mexputil[0]:=mexputil[1]+mexputil[2]+mexputil[3]+mexputil[4];
 
@@ -1318,9 +1389,9 @@ begin
                 if modeChoiceLogsum<-900 then
                   destProb[hhseg,purp,psseg,naseg,moseg,dtaz]:=0 else begin
                   destProb[hhseg,purp,psseg,naseg,moseg,dtaz]:=exp(destutil[purp,dtaz] +
-                   + DCCoef[purp,1]* modeChoiceLogsum
-                   + DCCoef[purp,4]* nasegDaytrip[naseg]*cdistsq
-                   + DCCoef[purp,5]* nasegNights12[naseg]*cdistsq);
+                   + DCCoef[purp+purpAdd,1]* modeChoiceLogsum
+                   + DCCoef[purp+purpAdd,4]* nasegDaytrip[naseg]*cdistsq
+                   + DCCoef[purp+purpAdd,5]* nasegNights12[naseg]*cdistsq);
 
                   if  (psseg=logsumPSSeg[purp])
                   and (naseg=logsumNASeg[purp])
@@ -1368,48 +1439,52 @@ begin
      end;
    end;
 
- end; {o zone loop}
+ end; {o zone- no longer a loop}
 end;
 
 const maxaocoef = 99;
 var autownCoeffsRead:boolean=false;
-    AOCoef:array[1..maxaocoef] of single;
+    AOCoef:array[1..2,1..maxaocoef] of single;
 
 procedure applyAutoOwnershipModel;
 const nAlts=5;
 
-var alt:integer; target,expusum:double; util,expu:array[1..nAlts] of double; cinf:text; cnum:integer; xstr:string[13];
+var alt:integer; target,expusum:double; util,expu:array[1..nAlts] of double; cinf:text; nmsegs,mseg,cnum:integer; xstr:string[13];
 
 begin
  if (stateToReadCarOwnershipFromHHFile<>999) and (stateToReadCarOwnershipFromHHFile<>zoneState[hhZoneIndex]) then begin
 
   if not(autownCoeffsRead) then begin
-        {read coefficients}
-        resetTextFile(cinf,setFileName(CoefficientDirectoryName,aocoeffile));
+     if UseSegmentedModels then nmsegs:=2 else nmsegs:=1;
+     {read coefficients}
+     for mseg:=1 to nmsegs do begin
+       resetTextFile(cinf,setFileName(CoefficientDirectoryName,aocoeffile[mseg]));
         repeat readln(cinf,xstr) until (copy(xstr,1,3)='END');
         repeat
           read(cinf,cnum);
           {write(purp,' ',cnum); readln;}
-          if (cnum>=0) and (cnum<=maxaocoef) then readln(cinf,xstr,AOCoef[cnum]) else readln(cinf);
+          if (cnum>=0) and (cnum<=maxaocoef) then readln(cinf,xstr,AOCoef[mseg,cnum]) else readln(cinf);
         until cnum<0;
         close(cinf);
         autownCoeffsRead:=true;
+     end;
   end;
 
+  mseg:=hhModelSegment;
   expusum:=0;
   for alt:=1 to nAlts do begin
     if alt=3 then util[alt]:=0 else begin
       util[alt]:=0
-        + AOCoef[10*alt+0] {constant}
-        + AOCoef[10*alt+1]*hh1Adult
-        + AOCoef[10*alt+2]*hh3Adults
-        + AOCoef[10*alt+3]*hh4PlusAdults
-        + AOCoef[10*alt+4]*hhWorkerRatio2
-        + AOCoef[10*alt+5]*hhHasKids
-        + AOCoef[10*alt+6]*hhHeadOver65
-        + AOCoef[10*alt+7]*hhHeadUnder35
-        + AOCoef[10*alt+8]*hhLogDensity
-        + AOCoef[10*alt+9]*hhLogIncome;
+        + AOCoef[mseg,10*alt+0] {constant}
+        + AOCoef[mseg,10*alt+1]*hh1Adult
+        + AOCoef[mseg,10*alt+2]*hh3Adults
+        + AOCoef[mseg,10*alt+3]*hh4PlusAdults
+        + AOCoef[mseg,10*alt+4]*hhWorkerRatio2
+        + AOCoef[mseg,10*alt+5]*hhHasKids
+        + AOCoef[mseg,10*alt+6]*hhHeadOver65
+        + AOCoef[mseg,10*alt+7]*hhHeadUnder35
+        + AOCoef[mseg,10*alt+8]*hhLogDensity
+        + AOCoef[mseg,10*alt+9]*hhLogIncome;
     end;
     expu[alt]:=exp(util[alt]);
     expusum:=expusum+expu[alt];
@@ -1438,41 +1513,44 @@ end;
 
 const maxtdcoef=99;
 var  durationCoeffsRead:boolean=false;
-     TDCoef:array[1..nTourPurposes,1..maxtdcoef] of single;
+     TDCoef:array[1..nCoefPurposes,1..maxtdcoef] of single;
 
 procedure applyTourNightsAwayModel;
 const nAlts=4;
 
-var alt:integer; target,expusum:double; util,expu:array[1..nAlts] of double; cinf:text; cnum,purp:integer; xstr:string[13];
+var alt:integer; target,expusum:double; util,expu:array[1..nAlts] of double; cinf:text; nmsegs,mseg,cnum:integer; xstr:string[13];
 begin
   if not(durationCoeffsRead) then begin
-      for purp:=1 to nTourPurposes do begin
+      if UseSegmentedModels then nmsegs:=10 else nmsegs:=5;
+      for mseg:=1 to nmsegs do begin
         {read coefficients}
-        resetTextFile(cinf,setFileName(CoefficientDirectoryName,tdcoeffile[purp]));
+        resetTextFile(cinf,setFileName(CoefficientDirectoryName,tdcoeffile[mseg]));
         repeat readln(cinf,xstr) until (copy(xstr,1,3)='END');
         repeat
           read(cinf,cnum);
           {write(purp,' ',cnum); readln;}
-          if (cnum>=0) and (cnum<=maxtdcoef) then readln(cinf,xstr,TDCoef[purp,cnum]) else readln(cinf);
+          if (cnum>=0) and (cnum<=maxtdcoef) then readln(cinf,xstr,TDCoef[mseg,cnum]) else readln(cinf);
         until cnum<0;
         close(cinf);
       end;
       durationCoeffsRead:=true;
   end;
 
+  if hhModelSegment>1 then mseg:=trPurpose+5 else mseg:=trPurpose;
+
   expusum:=0;
   for alt:=1 to nAlts do begin
     if alt=1 then util[alt]:=0 else begin
       util[alt]:=0
-        + TDCoef[trPurpose,10*alt+0] {constant}
-        + TDCoef[trPurpose,10*alt+1]*hhSize
-        + TDCoef[trPurpose,10*alt+3]*hhLogIncome
-        + TDCoef[trPurpose,10*alt+4]*hhHeadOver65
-        + TDCoef[trPurpose,10*alt+5]*hhHeadUnder35
-        + TDCoef[trPurpose,10*alt+6]*hhLogDensity
-        + TDCoef[trPurpose,10*alt+7]*trJunToAug
-        + TDCoef[trPurpose,10*alt+8]*trJanToMar
-        + TDCoef[trPurpose,10*alt+9]*trNovToDec;
+        + TDCoef[mseg,10*alt+0] {constant}
+        + TDCoef[mseg,10*alt+1]*hhSize
+        + TDCoef[mseg,10*alt+3]*hhLogIncome
+        + TDCoef[mseg,10*alt+4]*hhHeadOver65
+        + TDCoef[mseg,10*alt+5]*hhHeadUnder35
+        + TDCoef[mseg,10*alt+6]*hhLogDensity
+        + TDCoef[mseg,10*alt+7]*trJunToAug
+        + TDCoef[mseg,10*alt+8]*trJanToMar
+        + TDCoef[mseg,10*alt+9]*trNovToDec;
     end;
     expu[alt]:=exp(util[alt]);
     expusum:=expusum+expu[alt];
@@ -1494,49 +1572,52 @@ end;
 
 const maxpscoef=699;
 var  partysizeCoeffsRead:boolean=false;
-     PSCoef:array[1..nTourPurposes,1..maxpscoef] of single;
+     PSCoef:array[1..nCoefPurposes,1..maxpscoef] of single;
 
 procedure applyTourPartySizeModel;
 const nAlts=4;
 
 
-var alt:integer; target,expusum:double; util,expu:array[1..nAlts] of double; cinf:text; cnum,purp:integer; xstr:string[13];
+var alt:integer; target,expusum:double; util,expu:array[1..nAlts] of double; cinf:text; nmsegs,mseg,cnum:integer; xstr:string[13];
 begin
   if not(partysizeCoeffsRead) then begin
-      for purp:=1 to nTourPurposes do begin
+      if UseSegmentedModels then nmsegs:=10 else nmsegs:=5;
+      for mseg:=1 to nmsegs do begin
         {read coefficients}
-        resetTextFile(cinf,setFileName(CoefficientDirectoryName,pscoeffile[purp]));
+        resetTextFile(cinf,setFileName(CoefficientDirectoryName,pscoeffile[mseg]));
         repeat readln(cinf,xstr) until (copy(xstr,1,3)='END');
         repeat
           read(cinf,cnum);
           {write(purp,' ',cnum); readln;}
-          if (cnum>=0) and (cnum<=maxpscoef) then readln(cinf,xstr,PSCoef[purp,cnum]) else readln(cinf);
+          if (cnum>=0) and (cnum<=maxpscoef) then readln(cinf,xstr,PSCoef[mseg,cnum]) else readln(cinf);
         until cnum<0;
         close(cinf);
       end;
       partysizeCoeffsRead:=true;
   end;
 
+  if hhModelSegment>1 then mseg:=trPurpose+5 else mseg:=trPurpose;
+
   expusum:=0;
   for alt:=1 to nAlts do begin
-    if alt=min(hhSize,nAlts) then util[alt]:=PScoef[trPurpose,1]
+    if alt=min(hhSize,nAlts) then util[alt]:=PScoef[mseg,1]
                   else util[alt]:=0;
-    if alt=min(hhAdults,nAlts) then util[alt]:=util[alt]+PScoef[trPurpose,2];
+    if alt=min(hhAdults,nAlts) then util[alt]:=util[alt]+PScoef[mseg,2];
     if alt>1 then begin
       util[alt]:=util[alt]
-        + PScoef[trPurpose,100*alt+1] {constant}
-        + PScoef[trPurpose,100*alt+2]*hhWorkerRatio2
-        + PScoef[trPurpose,100*alt+3]*hhLogIncome
-        + PScoef[trPurpose,100*alt+5]*hhHas0Vehicles
-        + PScoef[trPurpose,100*alt+6]*hhHasCarCompetition
-        + PScoef[trPurpose,100*alt+7]*trDaytrip
-        + PScoef[trPurpose,100*alt+8]*tr1or2Nights
-        + PScoef[trPurpose,100*alt+9]*tr7PlusNights
-        + PScoef[trPurpose,100*alt+11]*trJunToAug
-        + PScoef[trPurpose,100*alt+12]*trJanToMar
-        + PScoef[trPurpose,100*alt+13]*trNovToDec
-        + PScoef[trPurpose,100*alt+15]*hhHeadOver65
-        + PScoef[trPurpose,100*alt+16]*hhHeadUnder35;
+        + PScoef[mseg,100*alt+1] {constant}
+        + PScoef[mseg,100*alt+2]*hhWorkerRatio2
+        + PScoef[mseg,100*alt+3]*hhLogIncome
+        + PScoef[mseg,100*alt+5]*hhHas0Vehicles
+        + PScoef[mseg,100*alt+6]*hhHasCarCompetition
+        + PScoef[mseg,100*alt+7]*trDaytrip
+        + PScoef[mseg,100*alt+8]*tr1or2Nights
+        + PScoef[mseg,100*alt+9]*tr7PlusNights
+        + PScoef[mseg,100*alt+11]*trJunToAug
+        + PScoef[mseg,100*alt+12]*trJanToMar
+        + PScoef[mseg,100*alt+13]*trNovToDec
+        + PScoef[mseg,100*alt+15]*hhHeadOver65
+        + PScoef[mseg,100*alt+16]*hhHeadUnder35;
     end;
     expu[alt]:=exp(util[alt]);
     expusum:=expusum+expu[alt];
@@ -1721,13 +1802,13 @@ begin
 
 const maxfrcoef=599;
       freqCoeffsRead:boolean = false;
-var   FrCoef:array[1..2,1..maxfrcoef] of single;
+var   FrCoef:array[1..4,1..maxfrcoef] of single;
 
 
 procedure applyTourGenerationModel;
 
 
-var alt,f,ls,cnum:integer;  cinf:text; xstr:string[13];
+var alt,f,fadd,ls,cnum,nmsegs,mseg:integer;  cinf:text; xstr:string[13];
   target:double;
   expusum:array[1..2] of double;
   util,expu:array[1..2,0..nTourPurposes] of double;
@@ -1739,26 +1820,32 @@ var alt,f,ls,cnum:integer;  cinf:text; xstr:string[13];
 const logsumlimit=-30;
 begin
  if not(freqCoeffsRead) then begin
-    for f:=1 to 2 do begin
+   if UseSegmentedModels then nmsegs:=4 else nmsegs:=2;
+   for mseg:=1 to nmsegs do begin
         {read coefficients}
-        resetTextFile(cinf,setFileName(CoefficientDirectoryName,frcoeffile[f]));
+        resetTextFile(cinf,setFileName(CoefficientDirectoryName,frcoeffile[mseg]));
         repeat readln(cinf,xstr) until (copy(xstr,1,3)='END');
         repeat
           read(cinf,cnum);
           {write(f,' ',cnum); readln;}
-          if (cnum>=0) and (cnum<=maxfrcoef) then readln(cinf,xstr,FrCoef[f,cnum]) else readln(cinf);
+          if (cnum>=0) and (cnum<=maxfrcoef) then readln(cinf,xstr,FrCoef[mseg,cnum]) else readln(cinf);
         until cnum<0;
         close(cinf);
     end;
     freqCoeffsRead:=true;
  end;
 
+ if hhId=24686832 then begin
+    writeln(hhid);
+ end;
  nTours:=0;
  for alt:=1 to nTourPurposes do hhTours[alt]:=0;
  hasAccess:=false;
  for ls:=2 to nDistBands do if accessibilityLogsums[hhModeDestSeg,1,ls]>-50 then hasAccess:=true;
  if hasAccess then begin
   {set utilities with everything except month}
+  if hhModelSegment=2 then fadd:=2 else fadd:=0;
+
   for f:=1 to 2 do begin
     util[f,0]:=0;
     expu[f,0]:=exp(util[f,0]);
@@ -1770,21 +1857,21 @@ begin
 
 
       util[f,alt]:=0
-            + FrCoef[f,100*alt+ 0] {constant}
-            + FrCoef[f,100*alt+22]*hhLogIncome
-            + FrCoef[f,100*alt+24]*hhHas0Vehicles
-            + FrCoef[f,100*alt+25]*hhHasCarCompetition
-            + FrCoef[f,100*alt+26]*hhHasKids
-            + FrCoef[f,100*alt+27]*hhWorkerRatio2
-            + FrCoef[f,100*alt+28]*hh1Adult
-            + FrCoef[f,100*alt+29]*hhHeadUnder35
-            + FrCoef[f,100*alt+30]*hhHeadOver65
-            + FrCoef[f,100*alt+31]*hhSize
-            + FrCoef[f,100*alt+13]*accLogsum[1]*(1-noLogsum1)
-            + FrCoef[f,100*alt+14]*accLogsum[2]
-            + FrCoef[f,100*alt+15]*accLogsum[3]
-            + FrCoef[f,100*alt+16]*accLogsum[4]
-            + FrCoef[f,100*alt+17]*noLogsum1;
+            + FrCoef[f+fadd,100*alt+ 0] {constant}
+            + FrCoef[f+fadd,100*alt+22]*hhLogIncome
+            + FrCoef[f+fadd,100*alt+24]*hhHas0Vehicles
+            + FrCoef[f+fadd,100*alt+25]*hhHasCarCompetition
+            + FrCoef[f+fadd,100*alt+26]*hhHasKids
+            + FrCoef[f+fadd,100*alt+27]*hhWorkerRatio2
+            + FrCoef[f+fadd,100*alt+28]*hh1Adult
+            + FrCoef[f+fadd,100*alt+29]*hhHeadUnder35
+            + FrCoef[f+fadd,100*alt+30]*hhHeadOver65
+            + FrCoef[f+fadd,100*alt+31]*hhSize
+            + FrCoef[f+fadd,100*alt+13]*accLogsum[1]*(1-noLogsum1)
+            + FrCoef[f+fadd,100*alt+14]*accLogsum[2]
+            + FrCoef[f+fadd,100*alt+15]*accLogsum[3]
+            + FrCoef[f+fadd,100*alt+16]*accLogsum[4]
+            + FrCoef[f+fadd,100*alt+17]*noLogsum1;
     end;
   end;
 
@@ -1798,7 +1885,7 @@ begin
       expusum[f]:=expu[f,0];
       for alt:=1 to nTourPurposes do begin
         if (alt>=4) and (hhWorkers=0) then expu[f,alt]:=0 else {commute and business require workers}
-        if f=1 then expu[f,alt]:=exp(util[f,alt]+FrCoef[f,100*alt+simMonth])
+        if f=1 then expu[f,alt]:=exp(util[f,alt]+FrCoef[f+fadd,100*alt+simMonth])
                else expu[f,alt]:=exp(util[f,alt]);
         expusum[f]:=expusum[f] + expu[f,alt];
       end;
@@ -1871,6 +1958,7 @@ begin
   end;
   nHHRecs:=0;
   lasthhZoneIndex:=0;
+  lastHH:=False;
   repeat
     nHHRecs:=nHHRecs+1;
     if nHHRecs mod (numberOfHouseholds div 20) = 0 then begin
